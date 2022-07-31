@@ -1,7 +1,10 @@
+from venv import create
 from django.shortcuts import render
 from yaml import serialize
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import mixins
+from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from .models import Post
 from .serializers import PostSerializers
@@ -82,3 +85,19 @@ def post_detail(request, pk):
         return HttpResponse(status=204)
 
 
+class PostMixinsListView(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    generics.GenericAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, pk, *args, **kwargs):
+        return self.update(request, pk, *args, **kwargs)
