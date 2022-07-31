@@ -7,6 +7,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Post, Comment
+from rest_framework import viewsets
 from .serializers import PostSerializers, OwnerSerializer, CommentSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from django.contrib.auth import get_user_model
@@ -124,3 +125,8 @@ class OwnerDetailView(generics.RetrieveAPIView):
 class CommentDetailView(generics.RetrieveAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+    permission_classes = (AllowAny,)
