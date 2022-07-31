@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from posts.views import PostView, post_detail, post_list, PostMixinsListView
+from posts.views import PostView, post_detail, post_list, PostMixinsListView, PostListView, PostDetailView, PostDestroyView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/post/', PostMixinsListView.as_view(), name='post-list'),
+    path('api/post/', PostListView.as_view(), name='post-list'),
+    path('api/post/<pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('api/post/<apk>/delete', PostDestroyView.as_view(), name='post-destroy'),
     #path('api/post/', PostView.as_view(), name='post-list'),
     #path('api/post/<pk>/', PostView.as_view(), name='post-list'),
     #path('api/post-list/', post_list, name='post-list'),

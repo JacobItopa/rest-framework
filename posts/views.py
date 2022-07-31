@@ -100,3 +100,14 @@ class PostMixinsListView(
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
+
+class PostDestroyView(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializers
