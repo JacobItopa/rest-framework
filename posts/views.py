@@ -89,6 +89,7 @@ class PostMixinsListView(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     generics.GenericAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
@@ -99,5 +100,3 @@ class PostMixinsListView(
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-    def put(self, request, pk, *args, **kwargs):
-        return self.update(request, pk, *args, **kwargs)
