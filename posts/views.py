@@ -6,16 +6,20 @@ from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Post
-from .serializers import PostSerializers
+from .models import Post, Comment
+from .serializers import PostSerializers, OwnerSerializer, CommentSerializer
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from django.contrib.auth import get_user_model
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
+from .permissions import IsOwnerPermission
 
 
 # Create your views here.
+User = get_user_model()
+
 class PostView(APIView):
 
     permission_classes = (AllowAny, )
@@ -103,7 +107,7 @@ class PostMixinsListView(
 class PostListView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsOwnerPermission, )
 
 class PostDetailView(generics.RetrieveAPIView):
     queryset = Post.objects.all()
@@ -112,3 +116,11 @@ class PostDetailView(generics.RetrieveAPIView):
 class PostDestroyView(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializers
+
+class OwnerDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = OwnerSerializer 
+
+class CommentDetailView(generics.RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
