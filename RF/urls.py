@@ -15,14 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from posts.views import PostView, post_detail, post_list, PostMixinsListView, PostListView, PostDetailView, PostDestroyView, OwnerDetailView, CommentDetailView
+from django.conf.urls.static import static
+from django.conf import settings
+from posts.views import homeview
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', homeview, name='home-view'),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/', include('posts.urls')),
-    path('api/owner/<pk>/', OwnerDetailView.as_view(), name='owner-detail'),
-    path('api/comment/<pk>/', CommentDetailView.as_view(), name='comment-detail'),
+    path('api/post/', include('posts.urls')),
+    #path('api/owner/<pk>/', OwnerDetailView.as_view(), name='owner-detail'),
+    #path('api/comment/<pk>/', CommentDetailView.as_view(), name='comment-detail'),
     #path('api/post/', PostListView.as_view(), name='post-list'),
     #path('api/post/<pk>/', PostDetailView.as_view(), name='post-detail'),
     #path('api/post/<apk>/delete', PostDestroyView.as_view(), name='post-destroy'),
@@ -31,3 +34,6 @@ urlpatterns = [
     #path('api/post-list/', post_list, name='post-list'),
     #path('api/post-details/<int:pk>/', post_detail, name='post-detail'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
